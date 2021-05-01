@@ -1,0 +1,50 @@
+-- lancer la query dans la database créée !!
+
+CREATE TABLE users (
+	user_id serial PRIMARY KEY,
+	username VARCHAR ( 50 ) UNIQUE NOT NULL,
+	full_name VARCHAR ( 50 ) NOT NULL,
+	password VARCHAR ( 50 ) NOT NULL,
+	bool_admin BOOLEAN NOT NULL,
+	email VARCHAR ( 255 ) UNIQUE NOT NULL
+) ;
+
+CREATE TABLE applications (
+	application_id serial PRIMARY KEY,
+	application_name VARCHAR ( 50 ) NOT NULL,
+	description VARCHAR ( 255 ) NOT NULL,
+	requirements JSON NOT NULL
+	
+) ;
+
+CREATE TABLE bdd (
+	bdd_id serial PRIMARY KEY,
+	bdd_name VARCHAR ( 50 ) NOT NULL,
+	bdd_size VARCHAR ( 255 ) NOT NULL,
+	nb_classes INT NOT NULL
+	
+) ;
+
+CREATE TABLE annotations (
+	annotation_id serial PRIMARY KEY,
+	bdd_id integer REFERENCES bdd (bdd_id),
+	application_id integer REFERENCES applications (application_id),
+	creation_path VARCHAR ( 255 ) NOT NULL,
+	creation_date DATE NOT NULL DEFAULT CURRENT_DATE,
+	description VARCHAR ( 255 ) NOT NULL
+	
+	
+) ;
+
+CREATE TABLE ref_applications (
+	annotation_id serial PRIMARY KEY,
+	user_id integer REFERENCES users (user_id),
+	application_id integer REFERENCES applications (application_id)
+	
+	
+) ;
+
+INSERT INTO users (username, full_name, password, bool_admin, email )
+VALUES('TGPhonk','Thomas Guily','420','0','thomas.guily@hotmail.fr');
+
+Select * from users
