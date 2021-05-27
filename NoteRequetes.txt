@@ -1,0 +1,59 @@
+
+
+//Partie Utilisateurs 
+
+//connexion
+SELECT password FROM users WHERE username = @username
+//comparer le résultat avec le mot de passe dans le formulaire de connexion 
+
+//registration, variables issues du form à inserer dans user
+INSERT INTO users (username, full_name, password, bool_admin, email) VALUES (@username, @full_name, @password, @bool_admin, @email);
+
+//sélection d'une application pour cela afficher les applications existantes
+SELECT * FROM applications
+
+//créer une annotation à partir d'une nouvelle db (deux parties : insérer la db référence, puis insérer l'annotation une fois créée)
+//insérer la db (formulaire ou il faut donner bdd_name, bdd_size et nb_classes en plus de drop un dossier qui a le même nom que bbd_name contenant le tout)
+INSERT INTO bdd (bdd_name, bdd_size, nb_classes)
+VALUES (@bdd_name, @bdd_size, @nb_classes);
+//après création de l'annotation insérer celle-ci
+INSERT INTO annotations (bdd_id, application_id, user_id, creation_path, creation_date, description)
+VALUES (@bdd_id, @application_id, @user_id, @creation_path, DEFAULT , @description);
+//le path on peut le créer en combinant le app_name et bdd_name
+
+
+//créer une annotation à partir d'une db qui existe pour cela créer un menu pour sélectionné la db
+SELECT * FROM bdd
+//après création de l'annotation
+INSERT INTO annotations (bdd_id, application_id, user_id, creation_path, creation_date, description)
+VALUES (@bdd_id, @application_id, @user_id, @creation_path, DEFAULT , @description);
+
+//Quand l'utilisateur utilise l'application pour créer une annotation il faut insérer la référence
+SELECT application_id FROM applications WHERE application_name = @application_name
+//normalement user_id est une variable qui reste une fois connecté
+INSERT INTO ref_applications (user_id, application_id) VALUES (@user_id, @application_id);
+
+//Voir les annotations
+SELECT * FROM annotations WHERE user_id = @user_id
+
+
+//Partie Administrateurs
+
+//Gestion des utilisateurs
+SELECT * FROM users
+
+//Delete un utilisateur
+DELETE FROM users WHERE user_id = @user_id
+
+#Ajout d'une application (pour cela l'admin doit donner le nom de l'application, une description et les requirements en JSON)
+INSERT INTO applications (application_name, description, requirements)
+VALUES (@application_name, @description, @requirements );
+
+//Voir toutes les annotations
+SELECT * FROM annotations
+
+#voir quel utilisateur à utiliser quelle application
+SELECT applications.application_name, users.username 
+FROM ref_applications
+INNER JOIN users ON ref_applications.user_id = users.user_id
+INNER JOIN applications ON ref_applications.application_id = applications.application_id;
