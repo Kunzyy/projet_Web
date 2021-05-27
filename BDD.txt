@@ -47,4 +47,12 @@ CREATE TABLE ref_applications (
 INSERT INTO users (username, full_name, password, bool_admin, email )
 VALUES('TGPhonk','Thomas Guily','420','0','thomas.guily@hotmail.fr');
 
+INSERT INTO applications (application_name, description, requirements)
+ VALUES
+ ('Classification Images', 'avec des réseaux de neuronnes profonds', '{ "jsonexample": "requirements"}'),
+ 
+ ('Localisation Objets', 'avec des réseaux de neuronnes profonds','{ "jsonexample": "resuirements"}' );
+	
+
+
 Select * from users
