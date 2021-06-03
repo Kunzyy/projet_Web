@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import React from 'react';
+import React , {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import HomeIcon from '@material-ui/icons/Home';
+import DataServiceUser from '../src/service-user';
 
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -28,6 +29,10 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
+        '& .MuiTextField-root': {
+            margin: theme.spacing(1),
+            width: '25ch',
+          },
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -70,6 +75,34 @@ function Copyright() {
 
 function Applications() {
     const classes = useStyles();
+    const [NbrImg, setNbrImg] = useState('');
+    const [NbrObjet, setNbrObjet] = useState('');
+    const [Description, setDescription] = useState('');
+   
+
+    const submitValue = () => {
+        var data = {
+            'nbr image' : NbrImg,
+            'nbr objet' : NbrObjet,
+            'description' : Description,
+            'bdd_name': 'bdd test',
+            'bdd_id': 2,
+            'bdd_size': 0,
+            'nb_classes':0,
+            'application_id':1,
+            'user_id':1,
+            'creation_path': 'path',
+            'creation_date': '04/06/21'
+
+        };
+        DataServiceUser.annoter(data)
+      .then(response => {console.log(response.data);})
+      .catch(e => {
+        console.log(e);
+      });
+      console.log(data)
+    }
+    
     return (
         <div className="App">
             <div className={classes.root}>
@@ -151,9 +184,42 @@ function Applications() {
                                 les actions requises pour l'utilisation de l'application seront mises là!
 
                             </Typography>
+     <form  noValidate autoComplete="off">
+      <div>
+        <TextField 
+        id="Nombre d'image" 
+        label="Nombre d'image"
+        helperText="Nombre d'image annoté généré"
+        defaultValue="500"
+        type="number" 
+        value={NbrImg}
+        onChange={e => setNbrImg(e.target.value)}
+        variant="outlined" />
+
+        <TextField
+          id="Nombre d'objet"
+          label="Nombre d'objet"
+          defaultValue="3"
+          type="number" 
+          helperText="Nombre d'objet maximun sur chaque image annoté"
+          value={NbrObjet}
+          onChange={e => setNbrObjet(e.target.value)}
+          variant="outlined"
+        />
+        <TextField
+          id="Nombre d'objet"
+          label="Description"
+          type="text" 
+          helperText="Description de l'annotation sur base des classes d'objet"
+          value={Description}
+          onChange={e => setDescription(e.target.value)}
+          variant="outlined"
+        />
+      </div>
+    </form>
                             <ButtonGroup variant="contained" color="primary" size="large" aria-label="contained primary button group">
                                 <Button>Options</Button>
-                                <Button>Annoter</Button>
+                                <Button onClick={submitValue}>Annoter</Button>
                                 <Button>Upload</Button>
                             </ButtonGroup>
                         </Container>

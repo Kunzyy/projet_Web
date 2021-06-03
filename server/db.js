@@ -2,8 +2,8 @@ let pg = require("pg");
 
 let config = {
     user: 'postgres',
-    database: '',
-    password: '',
+    database: 'WebTech',
+    password: 'mac',
     port: 5432
 };
 
