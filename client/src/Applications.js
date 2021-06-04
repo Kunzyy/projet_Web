@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import HomeIcon from '@material-ui/icons/Home';
-import DataServiceUser from '../src/service-user';
+import DataServiceUser from './services/tmpUserService';
 
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -109,9 +109,7 @@ function Applications() {
                 <AppBar position="static">
                     <Toolbar>
                         <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-
-
-                            <Link color="inherit" href="/">ACCEUIL </Link>
+                            <Link color="inherit" href="/">ACCUEIL </Link>
                         </IconButton>
                         <Typography variant="h6" className={classes.title}>
                         </Typography>

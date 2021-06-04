@@ -23,8 +23,6 @@ import Container from '@material-ui/core/Container';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 
-
-
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -77,7 +75,7 @@ function Inscription() {
                     <Toolbar>
                         <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
 
-                        <Link color="inherit" href="/">ACCEUIL </Link> 
+                        <Link color="inherit" href="/">ACCUEIL </Link>
             </IconButton>
                         <Typography variant="h6" className={classes.title}>
                         </Typography>
