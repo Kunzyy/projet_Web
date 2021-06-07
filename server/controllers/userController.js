@@ -20,7 +20,7 @@ router.post('/inscription', function (req, res) {
         }
         else {
             console.log(result)
-            res.json(result.rows.user_id);
+            res.json(result.rows[0].user_id);
         }
     });
 });

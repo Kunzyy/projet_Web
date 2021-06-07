@@ -3,6 +3,9 @@ import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 import React from "react";
 import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import {AppBar} from "@material-ui/core";
+import Toolbar from "@material-ui/core/Toolbar";
 
 // Fonctions pour la mise en forme des pages de Sign in et de sign up
 
@@ -99,9 +102,28 @@ function adminButton(isAdmin){
 
 }
 
+function navbar(classes, isLogged, isAdmin, clearCookies){
+
+    return (
+        <div className={classes.root}>
+            <AppBar position="static">
+                <Toolbar>
+                    <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                        <Link color="inherit" href="/">ACCUEIL</Link>
+                    </IconButton>
+                    <Typography variant="h6" className={classes.title}>
+                    </Typography>
+                    {adminButton(isAdmin)}
+                    {menu(isLogged,clearCookies)}
+                </Toolbar>
+            </AppBar>
+        </div>
+    )
+}
+
+
 export{
     useStyles,
     Copyright,
-    menu,
-    adminButton
+    navbar
 };

@@ -1,18 +1,11 @@
 import './App.css';
-import React, {Component, useState} from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
+import React, {useState} from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import HomeIcon from '@material-ui/icons/Home';
 
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -21,7 +14,7 @@ import Container from '@material-ui/core/Container';
 import {useCookies} from "react-cookie";
 
 import UserService from './services/user.service';
-import {useStyles,Copyright, menu, adminButton} from "./commonFunctions";
+import {useStyles, Copyright, navbar} from "./commonFunctions";
 
 import Applications from './Applications';
 import Inscription from './Inscription';
@@ -30,6 +23,7 @@ import {
     Switch,
     Route
 } from "react-router-dom";
+import IconButton from "@material-ui/core/IconButton";
 
 
 function Login () {
@@ -79,28 +73,18 @@ function Login () {
 
     return (
         <div className="App">
-            <div className={classes.root}>
-                <AppBar position="static">
-                    <Toolbar>
-                        <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
 
-                            <Link color="inherit" href="/">ACCUEIL</Link>
-                        </IconButton>
-                        <Typography variant="h6" className={classes.title}>
-                        </Typography>
+            {navbar(
+                classes,
+                cookies.isLogged,
+                cookies.isAdmin,
+                () => {
+                    setCookie('userId', null);
+                    setCookie('isLogged', 'false');
+                    setCookie('isAdmin', 'false');
+                }
+            )}
 
-                        {adminButton(cookies.isAdmin)}
-                        {menu(cookies.isLogged,
-                            () => {
-                                setCookie('userId', undefined);
-                                setCookie('isLogged', 'false');
-                                setCookie('isAdmin', 'false');
-                            })
-                        }
-
-                    </Toolbar>
-                </AppBar>
-            </div>
             <Container component="main" maxWidth="xs">
                 <CssBaseline/>
                 <div className={classes.paper}>
