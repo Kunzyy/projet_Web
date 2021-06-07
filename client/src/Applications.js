@@ -24,61 +24,30 @@ import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import {useCookies} from "react-cookie";
 
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-        '& .MuiTextField-root': {
-            margin: theme.spacing(1),
-            width: '25ch',
-          },
-    },
-    menuButton: {
-        marginRight: theme.spacing(2),
-    },
-    title: {
-        flexGrow: 1,
-    },
-
-    paper: {
-        marginTop: theme.spacing(8),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
-}));
-
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-      </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
+import {useStyles, Copyright, adminButton, menu} from "./commonFunctions";
 
 function Applications() {
     const classes = useStyles();
     const [NbrImg, setNbrImg] = useState('');
     const [NbrObjet, setNbrObjet] = useState('');
     const [Description, setDescription] = useState('');
-   
+
+    const [cookies, setCookie] = useCookies(['userId', 'isLogged', 'isAdmin']);
+
+
+    console.log(cookies.userId);
+    console.log(cookies.isLogged);
+    console.log(cookies.isAdmin);
+
+
+    if(cookies.isLogged === 'false'){
+        setCookie('userId', undefined);
+        setCookie('isLogged', 'false');
+        setCookie('isAdmin', 'false');
+        window.location.href='/';
+    }
 
     const submitValue = () => {
         var data = {
@@ -113,13 +82,15 @@ function Applications() {
                         </IconButton>
                         <Typography variant="h6" className={classes.title}>
                         </Typography>
-                        <Button color="inherit">
-                            <Link color="inherit" href="/applications">Applications </Link>
-                        </Button>
 
-                        <Button color="inherit">
-                            <Link color="inherit" href="/">Login </Link>
-                        </Button>
+                        {adminButton(cookies.isAdmin)}
+                        {menu(cookies.isLogged,
+                            () => {
+                                setCookie('userId', null);
+                                setCookie('isLogged', 'false');
+                                setCookie('isAdmin', 'false');
+                            })
+                        }
 
                     </Toolbar>
                 </AppBar>

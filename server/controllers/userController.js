@@ -7,16 +7,20 @@ router.use(bodyParser.json());
 
 
 router.post('/inscription', function (req, res) {
-
-    User.addUtilisateur(req,function(err,rows){
+    User.addUser(req.body,function(err,result){
         if(err) {
-            res.status(400).json(err);
-            console.error(err);
+            console.log(err);
+            console.log(err.constraint);
+            if(err.constraint ===  'users_email_key'){
+                res.json(err);
+            }
+            else{
+                res.status(400).json(err);
+            }
         }
-        else
-        {
-            console.log(rows);
-            res.json(rows);
+        else {
+            console.log(result)
+            res.json(result.rows.user_id);
         }
     });
 });
@@ -28,11 +32,10 @@ router.post('/checkLogin', function (req, res) {
             res.status(400).json(err);
             console.error(err);
         }
-        else
-        {
-            if(result.rows[0].count === '1'){
+        else {
+            if(result.rows[0].user_id){
                 console.log("Good Password");
-                res.json(1);
+                res.json(result.rows[0]);
             }
             else{
                 console.log("Bad password")
@@ -41,6 +44,5 @@ router.post('/checkLogin', function (req, res) {
         }
     });
 });
-
 
 module.exports = router;
