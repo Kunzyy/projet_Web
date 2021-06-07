@@ -3,7 +3,7 @@ let Pool = require("pg").Pool;
 let config = {
     user: 'postgres',
     database: 'webTechno',
-    password: 'B16$onus#FN4C',
+    password: '',
     port: 5432
 };
 
