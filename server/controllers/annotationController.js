@@ -1,10 +1,10 @@
-let express = require('express');
-let router = express.Router();
-let bodyParser = require('body-parser');
-router.use(bodyParser.json());
 let Annotation = require('../queries/annotation');
+let express = require('express');
+let bodyParser = require('body-parser');
 
-//on ajoute d'abord la bdd avant d'ajouter l'annotation
+let router = express.Router();
+router.use(bodyParser.json());
+
 
 router.post('/annotation', function (req, res) {
     Annotation.addBdd(req, function (err,result) {
@@ -27,10 +27,7 @@ router.post('/annotation', function (req, res) {
       }
     });
 
-
-
-
-  });
+});
   
 
-  module.exports = router;
+module.exports = router;

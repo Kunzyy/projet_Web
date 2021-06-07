@@ -1,13 +1,13 @@
-let pg = require("pg");
+let Pool = require("pg").Pool;
 
 let config = {
     user: 'postgres',
-    database: 'WebTech',
-    password: 'mac',
+    database: 'webTechno',
+    password: '',
     port: 5432
 };
 
-let pool = new pg.Pool(config);
+let pool = new Pool(config);
 console.log("Connexion");
 
 module.exports = pool;

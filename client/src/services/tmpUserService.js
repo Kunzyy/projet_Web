@@ -1,4 +1,4 @@
-import http from "../src/http-commun";
+import http from "../http-common";
 
 class DataServiceUser {
   getAlluser() {

@@ -1,6 +1,12 @@
 let express = require('express');
 let app = express();
-const cors = require("cors");
+let bodyParser = require("body-parser");
+
+let userController = require('./controllers/userController.js');
+let annotationController = require('./controllers/annotationController.js');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -9,13 +15,12 @@ app.use(function(req, res, next) {
     req.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
-app.use(cors());
-let bodyParser = require('body-parser');
-app.use(bodyParser.json());
 
-let annotationController = require('./controllers/controllerAnnotation.js');
+/*app.get("/api", (req, res) => {
+    res.json({ message: "Hello from server!" });
+});*/
 
-
+/*
 app.post('/api',function(req,res){
     console.log(req.body.description);
     // if(err) {
@@ -25,13 +30,18 @@ app.post('/api',function(req,res){
     //   {
     //     res.json(result);
     //   }
-});
+});*/
 
-
-app.use('/',annotationController);
-
+app.use('/users', userController);
+app.use('/annotations',annotationController);
 
 let PORT = process.env.PORT || 8081;
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
 });
+
+
+
+
+
+
