@@ -5,6 +5,7 @@
 
 CREATE TABLE users (
 	user_id serial PRIMARY KEY,
+	username VARCHAR ( 50 ) NOT NULL,
 	full_name VARCHAR ( 50 ) NOT NULL,
 	password VARCHAR ( 50 ) NOT NULL,
 	bool_admin BOOLEAN NOT NULL,
@@ -15,8 +16,7 @@ CREATE TABLE applications (
 	application_id serial PRIMARY KEY,
 	application_name VARCHAR ( 50 ) NOT NULL,
 	description VARCHAR ( 255 ) NOT NULL,
-	requirements JSON NOT NULL
-	
+	requirements JSON NOT NULL	
 ) ;
 
 CREATE TABLE bdd (
@@ -24,7 +24,6 @@ CREATE TABLE bdd (
 	bdd_name VARCHAR ( 50 ) NOT NULL,
 	bdd_size VARCHAR ( 255 ) NOT NULL,
 	nb_classes INT NOT NULL
-	
 ) ;
 
 CREATE TABLE annotations (
@@ -34,14 +33,12 @@ CREATE TABLE annotations (
 	user_id integer REFERENCES users (user_id),
 	creation_path VARCHAR ( 255 ) NOT NULL,
 	creation_date DATE NOT NULL DEFAULT CURRENT_DATE,
-	description VARCHAR ( 255 ) NOT NULL
-	
-	
+	description VARCHAR ( 255 ) NOT NULL	
 ) ;
 
 
-INSERT INTO users ( full_name, password, bool_admin, email )
-VALUES('Thomas Guily','420','0','thomas.guily@hotmail.fr');
+INSERT INTO users (username, full_name, password, bool_admin, email )
+VALUES('TGPhonk','Thomas Guily','420','1','thomas.guily@hotmail.fr');
 
 INSERT INTO applications (application_name, description, requirements)
  VALUES
