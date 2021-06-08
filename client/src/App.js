@@ -1,10 +1,13 @@
 import './App.css';
 import React from 'react';
-import "bootstrap/dist/css/bootstrap-grid.min.css";
+
 
 import Applications from './Applications';
 import Inscription from './Inscription';
+import Admin from './Admin';
 import Login from './Login';
+import NewApplication from './NewApplication';
+import Resultat from './Resultat';
 import {
   BrowserRouter as Router,
   Switch,
@@ -29,6 +32,15 @@ function App() {
             </Route>
             <Route path="/inscription">
               <Inscription />
+            </Route>
+            <Route path="/admin">
+              <Admin />
+            </Route>
+            <Route path="/newApplication">
+              <NewApplication />
+            </Route>
+            <Route path="/resultat">
+              <Resultat />
             </Route>
             <Route path="/">
               <Login />
