@@ -137,6 +137,9 @@ function Admin() {
                             <Button>Supprimer Annotation</Button>
                             <Button onClick={submitValue}>Utiliser Annnotation</Button>
                             <Button onClick={submitValue}>Ajouter Annotation</Button>
+                            <Button >
+                            <Link color="inherit" href="/NewApplication">Ajouter Application </Link>   
+                            </Button>
                         </ButtonGroup>
                             
                         </Container>

@@ -126,11 +126,12 @@ function Applications() {
 
                     <Container  >
                         <br />
-                        <Typography component="div" style={{ backgroundColor: '#CACFD2 ', height: '45vh' }} >
+                        <Typography component="div" style={{ backgroundColor: '#CACFD2 ', height: '10vh' }} >
                             <h1> Zone de traitement</h1>
                             les actions requises pour l'utilisation de l'application seront mises là!
 
                         </Typography>
+                        <br/>
                         <form  noValidate autoComplete="off">
                           <div>
                             <TextField
@@ -143,6 +144,7 @@ function Applications() {
                             onChange={e => setNbrImg(e.target.value)}
                             variant="outlined" />
 
+
                             <TextField
                               id="Nombre d'objet"
                               label="Nombre d'objet"
@@ -153,8 +155,20 @@ function Applications() {
                               onChange={e => setNbrObjet(e.target.value)}
                               variant="outlined"
                             />
+
                             <TextField
-                              id="Nombre d'objet"
+                              id="Nombre de classe"
+                              label="Nombre de classe"
+                              defaultValue="3"
+                              type="number"
+                              helperText="Nombre d'objet maximun sur chaque image annoté"
+                              value={NbrObjet}
+                              onChange={e => setNbrObjet(e.target.value)}
+                              variant="outlined"
+                            />
+
+                            <TextField
+                              id="Description"
                               label="Description"
                               type="text"
                               helperText="Description de l'annotation sur base des classes d'objet"
