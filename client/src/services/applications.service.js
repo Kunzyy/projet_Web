@@ -12,8 +12,12 @@ class ApplicationService {
         });
     }
 
-    add(){
-        return http.post('applications/add');
+    add(name, descr, requirements){
+        return http.post('applications/add',{
+            name: name,
+            descr: descr,
+            requirements: requirements
+        });
     }
 }
 

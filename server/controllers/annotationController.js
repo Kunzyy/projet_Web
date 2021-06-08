@@ -33,12 +33,20 @@ router.post('/addBdd', function (req, res) {
 
 router.post('/runAnnotation', function(req, res) {
     runAnnotation(req.body.nbrImgGen, req.body.nbrMaxObj)
-        .then(res => {
-
+        .then(result => {
+                Annotation.addAnnotation(req.body, function(err2, result2){
+                    if(err2){
+                        res.status(400).json(err2)
+                    }
+                    else{
+                        res.json(result2);
+                    }
+                });
+                res.json(result);
             }
         )
         .catch(err => {
-
+                res.status(400).json(err)
         })
 })
 
@@ -77,7 +85,5 @@ router.get('/getAll', function(req, res){
         }
     })
 })
-
-router.post('/delete')
 
 module.exports = router;

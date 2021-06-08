@@ -3,13 +3,11 @@ import React, {useState} from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import UserService from "./services/user.service";
+import ApplicationService from "./services/applications.service";
 
 import {useStyles, Copyright, navbar} from "./commonFunctions";
 import {useCookies} from "react-cookie";
@@ -22,32 +20,27 @@ function NewApplication() {
 
     const [msgError1, setError1] = useState('');
     const [msgError2, setError2] = useState('');
-    const [msgError3, setError3] = useState('');
-    const [username, setUsername] = useState('');
-    const [fullName, setfullName] = useState('');
-    const [mail, setMail] = useState('');
-    const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
+    const [descr, setDescr] = useState('');
+    const [requirements, setRequire] = useState('');
+
+    if (cookies.isLogged === 'false' || cookies.isAdmin === 'false') {
+        setCookie('userId', undefined);
+        setCookie('isLogged', 'false');
+        setCookie('isAdmin', 'false');
+        window.location.href = '/';
+    }
 
     function handleClick() {
         return new Promise((resolve, reject) => {
-            if (username === "" || fullName === "" || mail === "" || password === "") {
+            if (name === "" || descr === "" || requirements === "") {
                 reject("Tous les champs ne sont pas remplis");
             } else {
-                UserService.addUser(username, fullName, mail, password)
-                    .then(res => {
-                        console.log(res.data);
-                        if(res.data.constraint === 'users_email_key'){
-                            reject("Adresse email déjà utilisée ! ");
-                        }
-                        else {
-                            console.log(res.data);
-                            setCookie('userId', res.data);
-                            setCookie('isLogged', 'true');
-                            setCookie('isAdmin', 'false');
-                            resolve();
-                        }
+                ApplicationService.add(name, descr, requirements)
+                    .then(() => {
+                        resolve();
                     })
-                    .catch(err => {
+                    .catch(() => {
                         reject("Problème avec la base de données");
                     });
             }
@@ -85,7 +78,7 @@ function NewApplication() {
                             name="applicationName"
                             autoComplete="username"
                             autoFocus
-                            onChange={e => setUsername(e.target.value)}
+                            onChange={e => setName(e.target.value)}
                         />
                         <TextField
                             variant="outlined"
@@ -93,11 +86,11 @@ function NewApplication() {
                             required
                             fullWidth
                             id="descriptionApplication"
-                            label="Description Apllication"
+                            label="Description Application"
                             name="descriptionApplication"
                             autoComplete="fullName"
                             autoFocus
-                            onChange={e => setfullName(e.target.value)}
+                            onChange={e => setDescr(e.target.value)}
                         />
                         <TextField
                             variant="outlined"
@@ -109,9 +102,9 @@ function NewApplication() {
                             name="requirements"
                             autoComplete="email"
                             autoFocus
-                            onChange={e => setMail(e.target.value)}
+                            onChange={e => setRequire(e.target.value)}
                         />
-                        <p>{msgError3}</p>
+                        <p>{msgError2}</p>
                         <p>{msgError1}</p>
                         <Button
                             fullWidth

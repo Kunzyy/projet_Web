@@ -2,7 +2,10 @@ let db = require("../db-config.js")
 
 let Applications = {
     create : function(data, callback){
-        db.query('INSERT INTO applications (application_name, description) VALUES ($1,$2)');
+        let requirements = {
+            requirements : data.requirements
+        }
+        db.query('INSERT INTO applications (application_name, description, requirements) VALUES ($1,$2,$3)',[data.name, data.descr, requirements], callback);
     },
 
     getAll : function(callback){

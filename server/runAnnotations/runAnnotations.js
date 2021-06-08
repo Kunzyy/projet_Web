@@ -5,7 +5,7 @@ function runAnnotation (nbrImgGen, nbrMaxObj)
         return new Promise((resolve, reject) => {
             const child = spawn('python',
                 [
-                    'mix_objects_Backgroun.py',   //args 0   Permet d'appeler le code python
+                    './mix_objects_Backgroun.py',   //args 0   Permet d'appeler le code python
                     nbrImgGen,    //args nbre d'images à générer
                     nbrMaxObj    //args nbre max d'objets à appliquer
                 ]);

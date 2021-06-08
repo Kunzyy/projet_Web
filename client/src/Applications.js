@@ -20,6 +20,7 @@ function Applications() {
     const classes = useStyles();
     const [NbrImg, setNbrImg] = useState(500);
     const [NbrObjet, setNbrObjet] = useState(3);
+    const [NbrClasses, setNbrClasses] = useState(3);
     const [Description, setDescription] = useState('');
 
     const [applicationName, setName] = useState('Veuillez choisir une application à gauche');
@@ -189,7 +190,16 @@ return (
                     <br />
                         <ButtonGroup variant="contained" color="primary" size="large" aria-label="contained primary button group">
                             <Button>Options</Button>
-                            <Button onClick={submitValue}>Annoter</Button>
+                            <Button onClick={() =>{
+                                AnnotationService.runAnnotation(NbrImg, NbrObjet)
+                                .then(res => {
+                                console.log(res);
+                                })
+                                .catch(err => {
+                                    console.log(err);
+                                })
+                            }
+                            }>Annoter</Button>
                             <Button>Upload</Button>
                         </ButtonGroup>
                 </Grid>

@@ -30,4 +30,17 @@ router.post('/getDescrById', function(req, res) {
 });
 
 
+router.post('/add', function(req, res) {
+    Applications.create(req.body,function(err, result){
+        if(err){
+            console.log(err);
+            res.status(400).json(err);
+        }
+        else{
+            res.json(result.rows[0]);
+        }
+    })
+});
+
+
 module.exports = router;

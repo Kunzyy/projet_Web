@@ -62,12 +62,6 @@ function Admin() {
             'creation_date': '04/06/21'
 
         };
-        DataServiceUser.annoter(data)
-      .then(response => {console.log(response.data);})
-      .catch(e => {
-        console.log(e);
-      });
-      console.log(data)
     }
 
     function createDataAnnotations(id, database, application, user,  path, date, descr) {
@@ -154,8 +148,8 @@ function Admin() {
                         <Container  >
                             <Typography component="div" style={{height: '5vh' }} >
                             </Typography>
-                            <Typography component="div" style={{ backgroundColor: '#CACFD2 ', height: '60vh' }} >
-                                <TableContainer style={{ height: '60vh'}} className={classes.container}>
+                            <Typography component="div" style={{ backgroundColor: '#CACFD2 ', height: '55vh' }} >
+                                <TableContainer style={{ height: '55vh'}} className={classes.container}>
                                     <Table stickyHeader aria-label="sticky table">
                                         <TableHead>
                                             <TableRow>
@@ -220,7 +214,8 @@ function Admin() {
                                         }}
                                     >
                                         Supprimer Annotation</Button>
-                                    <Button href={"/applications"}>Ajouter Annotation</Button>
+                                    <Button href={"#"}>Ajouter données annotation</Button>
+                                    <Button href={"#"}>Tester des annotations</Button>
                                 </ButtonGroup>
                                     <br/>
                                 <hr/>
