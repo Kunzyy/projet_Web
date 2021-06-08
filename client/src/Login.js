@@ -73,7 +73,7 @@ function Login () {
 
     return (
         <div className="App">
-
+            <div className={classes.root}>
             {navbar(
                 classes,
                 cookies.isLogged,
@@ -154,12 +154,12 @@ function Login () {
                         </Grid>
                     </form>
                 </div>
-                <Box mt={8}>
-                    <Copyright/>
-                </Box>
             </Container>
+            </div>
+            <Box mt={8}>
+                <Copyright/>
+            </Box>
         </div>
-
     );
 }
 

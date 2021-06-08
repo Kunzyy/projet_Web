@@ -2,23 +2,30 @@ let db = require("../db-config.js")
 
 let Annotation = {
 
-    addAnnotation: function (req,callback) {
-    return db.query('INSERT INTO annotations (bdd_id,application_id,user_id,creation_path,creation_date,description) VALUES ($1,$2,$3,$4,$5,$6)',
-      [req.body.bdd_id,req.body.application_id,req.body.user_id,req.body.creation_path,req.body.creation_date,req.body.description],
+    addAnnotation: function (data,callback) {
+    db.query('INSERT INTO annotations (bdd_id,application_id,user_id,creation_path,creation_date,description) VALUES ($1,$2,$3,$4,$5,$6)',
+      [data.bdd_id,data.application_id,data.user_id,data.creation_path,data.creation_date,data.description],
       callback);
   },
 
-    addBdd: function(req,callback){
+    addBdd: function(data,callback){
 
-        return db.query('INSERT INTO bdd (bdd_name,bdd_size,nb_classes) VALUES($1,$2,$3)',
-        [req.body.bdd_name,req.body.bdd_size,req.body.nb_classes],
+        db.query('INSERT INTO bdd (bdd_name,bdd_size,nb_classes) VALUES($1,$2,$3)',
+        [data.bdd_name,data.bdd_size,data.nb_classes],
         callback);
-  },
-  bdd_id: function(callback){
-    return db.query('SELECT * FROM bdd WHERE bdd_id=(SELECT max(bdd_id) FROM bdd)', callback);
-  }
-  
-  
+    },
+
+    bdd_id: function(callback){
+        db.query('SELECT * FROM bdd WHERE bdd_id=(SELECT max(bdd_id) FROM bdd)', callback);
+    },
+
+    getAll: function(callback){
+        db.query('SELECT * FROM annotations');
+    },
+
+    delete: function(data, callback){
+        db.query('DELETE FROM annotations WHERE annotation_id = $1', [data.annotId], callback);
+    }
 };
 
 

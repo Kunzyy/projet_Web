@@ -37,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    container:{
+        maxHeight: 440
+    }
 }));
 
 function Copyright() {
@@ -105,19 +108,17 @@ function adminButton(isAdmin){
 function navbar(classes, isLogged, isAdmin, clearCookies){
 
     return (
-        <div className={classes.root}>
-            <AppBar position="static">
-                <Toolbar>
-                    <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-                        <Link color="inherit" href="/">ACCUEIL</Link>
-                    </IconButton>
-                    <Typography variant="h6" className={classes.title}>
-                    </Typography>
-                    {adminButton(isAdmin)}
-                    {menu(isLogged,clearCookies)}
-                </Toolbar>
-            </AppBar>
-        </div>
+        <AppBar position="static">
+            <Toolbar>
+                <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                    <Link color="inherit" href="/">ACCUEIL</Link>
+                </IconButton>
+                <Typography variant="h6" className={classes.title}>
+                </Typography>
+                {adminButton(isAdmin)}
+                {menu(isLogged,clearCookies)}
+            </Toolbar>
+        </AppBar>
     )
 }
 

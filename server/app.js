@@ -3,6 +3,7 @@ let app = express();
 let bodyParser = require("body-parser");
 
 let userController = require('./controllers/userController.js');
+let applicationController = require('./controllers/applicationsController.js');
 let annotationController = require('./controllers/annotationController.js');
 
 app.use(bodyParser.json());
@@ -33,6 +34,7 @@ app.post('/api',function(req,res){
 });*/
 
 app.use('/users', userController);
+app.use('/applications', applicationController);
 app.use('/annotations',annotationController);
 
 let PORT = process.env.PORT || 8081;

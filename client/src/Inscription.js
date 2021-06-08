@@ -56,7 +56,7 @@ function Inscription() {
 
     return (
         <div className="App">
-
+            <div className={classes.root}>
             {navbar(
                 classes,
                 cookies.isLogged,
@@ -188,6 +188,7 @@ function Inscription() {
                     </form>
                 </div>
             </Container>
+            </div>
             <Box mt={8}>
                 <Copyright />
             </Box>

@@ -45,4 +45,16 @@ router.post('/checkLogin', function (req, res) {
     });
 });
 
+router.get('/getAll', function(req,res){
+    User.getAll(function(err, result) {
+        if (err) {
+            console.log(err);
+            res.status(400).json(err);
+        } else {
+            console.log(result.rows);
+            res.json(result.rows);
+        }
+    })
+});
+
 module.exports = router;

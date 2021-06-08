@@ -18,6 +18,10 @@ class UserService {
             password: password
         });
     }
+
+    getAllUsers(){
+        return http.get('/users/getAll');
+    }
 }
 
 export default new UserService();
