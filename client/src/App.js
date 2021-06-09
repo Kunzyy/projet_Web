@@ -8,6 +8,7 @@ import Admin from './Admin';
 import Login from './Login';
 import NewApplication from './NewApplication';
 import Resultat from './Resultat';
+import Equipe from './Equipe';
 import {
   BrowserRouter as Router,
   Switch,
@@ -41,6 +42,9 @@ function App() {
             </Route>
             <Route path="/resultat">
               <Resultat />
+            </Route>
+            <Route path="/equipe">
+              <Equipe />
             </Route>
             <Route path="/">
               <Login />

@@ -10,9 +10,17 @@ import Toolbar from "@material-ui/core/Toolbar";
 // Fonctions pour la mise en forme des pages de Sign in et de sign up
 
 const useStyles = makeStyles((theme) => ({
-    root: {
+    root: {    
         flexGrow: 1,
     },
+    shapeCard:{
+        maxWidth: 345,
+        margin: theme.spacing(12),  
+    },
+
+    media: {
+        height: 340,
+      },
     menuButton: {
         marginRight: theme.spacing(2),
     },
@@ -115,6 +123,9 @@ function navbar(classes, isLogged, isAdmin, clearCookies){
                 </IconButton>
                 <Typography variant="h6" className={classes.title}>
                 </Typography>
+                <Button color="inherit">
+                <Link color="inherit" href="/equipe">Equipe</Link>
+                </Button>
                 {adminButton(isAdmin)}
                 {menu(isLogged,clearCookies)}
             </Toolbar>
