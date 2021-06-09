@@ -13,6 +13,7 @@ import Container from '@material-ui/core/Container';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import {useCookies} from "react-cookie";
 import DOMPurify from "dompurify"
+import { useDropzone } from "react-dropzone"
 
 import {useStyles, Copyright, navbar} from "./commonFunctions";
 
@@ -25,6 +26,7 @@ function Applications() {
 
     const [applicationName, setName] = useState('Veuillez choisir une application à gauche');
     const [apps, setApps] = useState('');
+    const [files, setFiles] = useState([])
 
     const [cookies, setCookie] = useCookies(['userId', 'isLogged', 'isAdmin']);
 
@@ -95,6 +97,19 @@ function Applications() {
       console.log(data)
     }
 
+    const { getRootProps, getInputProps } = useDropzone({
+        accept: "image/*",
+        onDrop: (acceptedFiles) => {
+          setFiles(
+            acceptedFiles.map((file) =>
+              Object.assign(file, {
+                preview: URL.createObjectURL(file),
+              })
+            )
+          )
+        },
+      })
+
 
 return (
         <div className="App">
@@ -121,14 +136,7 @@ return (
                         </Container>
                         <br />
                         <br />
-                        <hr />
-                        <Container>
-                            <h1> Mes Annotations </h1>
-                            <Typography component="div">
-                                Bonjour
-                            </Typography>
-
-                        </Container>
+              
 
 
                     </Container>
@@ -144,9 +152,12 @@ return (
 
                     <Container  >
                         <br />
-                        <Typography component="div" style={{ backgroundColor: '#CACFD2 ', height: '10vh' }} >
-                            <h1> Zone de traitement</h1>
-                            les actions requises pour l'utilisation de l'application seront mises là!
+                        <Typography component="div" style={{ backgroundColor: '#CACFD2 ', height: '13vh' }} >
+                        <h1> Zone de drop</h1>
+                            <div {...getRootProps()}>
+                            <input {...getInputProps()} />
+                            <p>Drop le fichier des images d'objet</p>
+                        </div>
 
                         </Typography>
                         <br />
@@ -174,14 +185,26 @@ return (
                             />
 
                             <TextField
-                              id="description"
+                              id="Nombre de classe"
+                              label="Nombre de classe"
+                              type="number"
+                              helperText="Nombre de classe du dossier d'objet"
+                              onChange={e => setNbrObjet(e.target.value)}
+                              variant="outlined"
+                            />
+
+                            <TextField
+                             id="description"
                               label="Description"
                               type="text"
                               helperText="Description de l'annotation sur base des classes d'objet"
                               value={Description}
                               onChange={e => setDescription(e.target.value)}
-                              variant="outlined"
+                              variant="outlined" 
+
                             />
+
+
                           </div>
                         </form>
                     </Container>
@@ -189,7 +212,6 @@ return (
                     <br />
                     <br />
                         <ButtonGroup variant="contained" color="primary" size="large" aria-label="contained primary button group">
-                            <Button>Options</Button>
                             <Button onClick={() =>{
                                 AnnotationService.runAnnotation(NbrImg, NbrObjet)
                                 .then(res => {
@@ -200,7 +222,6 @@ return (
                                 })
                             }
                             }>Annoter</Button>
-                            <Button>Upload</Button>
                         </ButtonGroup>
                 </Grid>
             </Grid>
