@@ -21,7 +21,6 @@ CREATE TABLE applications (
 
 CREATE TABLE bdd (
 	bdd_id serial PRIMARY KEY,
-	bdd_name VARCHAR ( 50 ) NOT NULL,
 	bdd_size VARCHAR ( 255 ) NOT NULL,
 	nb_classes INT NOT NULL
 ) ;
