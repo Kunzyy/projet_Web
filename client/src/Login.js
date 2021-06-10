@@ -16,15 +16,6 @@ import {useCookies} from "react-cookie";
 import UserService from './services/user.service';
 import {useStyles, Copyright, navbar} from "./commonFunctions";
 
-import Applications from './Applications';
-import Inscription from './Inscription';
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route
-} from "react-router-dom";
-import IconButton from "@material-ui/core/IconButton";
-
 
 function Login () {
 
@@ -54,7 +45,7 @@ function Login () {
             UserService.checkLogin(mail, password)
                 .then(res => {
                     if (res.data) {
-                        let isAdmin = (res.data.bool_admin === 'true');
+                        let isAdmin = res.data.bool_admin;
                         setCookie('userId', res.data.user_id);
                         setCookie('isLogged', 'true');
                         setCookie('isAdmin', isAdmin);

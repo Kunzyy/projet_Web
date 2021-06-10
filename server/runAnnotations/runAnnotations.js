@@ -1,13 +1,16 @@
 const {spawn}= require('child_process');
 
-function runAnnotation (nbrImgGen, nbrMaxObj)
+function runAnnotation (data, newAnnotationId, bddName)
     {
         return new Promise((resolve, reject) => {
-            const child = spawn('python',
+            const child = spawn('python3',
                 [
-                    './mix_objects_Backgroun.py',   //args 0   Permet d'appeler le code python
-                    nbrImgGen,    //args nbre d'images à générer
-                    nbrMaxObj    //args nbre max d'objets à appliquer
+                    'server/runAnnotations/mix_objects_Backgroun.py',   //args 0   Permet d'appeler le code python
+                    data.nbrImgGen,    //args nbre d'images à générer
+                    data.nbrMaxObj,    //args nbre max d'objets à appliquer
+                    data.nbrClasses,
+                    newAnnotationId,
+                    bddName
                 ]);
             child.on('exit', (code) => {
                 console.log('child process exited with' +

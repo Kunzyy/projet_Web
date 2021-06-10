@@ -6,19 +6,15 @@ class AnnotationService {
         return http.post('/applications/add',);
     }
 
-    runAnnotation(nbrImgGen, nbrMaxObj, descr){
+    runAnnotation(nbrImgGen, nbrMaxObj, nbrClasses, descr, userId, applicationId, bddId){
         return http.post('/annotations/runAnnotation',{
             nbrImgGen: nbrImgGen,
             nbrMaxObj: nbrMaxObj,
+            nbrClasses: nbrClasses,
             description : descr,
-            bdd_name: 'bdd test',
-            bdd_id: 2,
-            bdd_size: 0,
-            'nb_classes':0,
-            'application_id':1,
-            'user_id':1,
-            'creation_path': 'path',
-            'creation_date': '04/06/21'
+            bddId: parseInt(bddId),
+            application_id: parseInt(applicationId),
+            user_id: parseInt(userId)
         });
     }
 
@@ -30,6 +26,10 @@ class AnnotationService {
         return http.post('/annotations/delete',{
             annotId: annotId
         })
+    }
+
+    getAllBdd(){
+        return http.get('/database/getAll');
     }
 }
 

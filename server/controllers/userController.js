@@ -19,7 +19,7 @@ router.post('/inscription', function (req, res) {
             }
         }
         else {
-            console.log(result)
+            console.log(result);
             res.json(result.rows[0].user_id);
         }
     });
@@ -33,12 +33,13 @@ router.post('/checkLogin', function (req, res) {
             console.error(err);
         }
         else {
-            if(result.rows[0].user_id){
+            console.log(result);
+            if(result.rowCount){
                 console.log("Good Password");
                 res.json(result.rows[0]);
             }
             else{
-                console.log("Bad password")
+                console.log("Bad password");
                 res.json(0);
             }
         }
@@ -51,7 +52,6 @@ router.get('/getAll', function(req,res){
             console.log(err);
             res.status(400).json(err);
         } else {
-            console.log(result.rows);
             res.json(result.rows);
         }
     })

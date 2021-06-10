@@ -13,7 +13,6 @@ let Applications = {
     },
 
     getDescrById : function(data, callback){
-        console.log(data);
         db.query('SELECT application_name, description FROM applications WHERE application_id = $1', [data.applicationId], callback);
     }
 }

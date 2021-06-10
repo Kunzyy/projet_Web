@@ -5,6 +5,7 @@ let bodyParser = require("body-parser");
 let userController = require('./controllers/userController.js');
 let applicationController = require('./controllers/applicationsController.js');
 let annotationController = require('./controllers/annotationController.js');
+let bddController = require('./controllers/bddController.js');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -36,6 +37,7 @@ app.post('/api',function(req,res){
 app.use('/users', userController);
 app.use('/applications', applicationController);
 app.use('/annotations',annotationController);
+app.use('/database',bddController);
 
 let PORT = process.env.PORT || 8081;
 app.listen(PORT, () => {

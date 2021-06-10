@@ -9,8 +9,11 @@ import cv2
 import tensorflow as tf
 
 parser = argparse.ArgumentParser(description='Generation d images')
-parser.add_argument('nbr_images', type=int, default=5000, help='Nombre d images a generer')
-parser.add_argument('max_nbr_objs', type=int, default= 1, help='Nombre maximum d objets à appliquer')
+parser.add_argument('nbr_images', type=int, default=500, help='Nombre d images a generer')
+parser.add_argument('max_nbr_objs', type=int, default= 3, help='Nombre maximum d objets à appliquer')
+parser.add_argument('nb_classes', type=int, help='nombre de classes d images a ajouter')
+parser.add_argument('annotation_id', type=int, help='ID d annotation necessaire pour la creation d un dossier')
+parser.add_argument('bdd_index', type=int, help='index de la BDD a utiliser')
 args = parser.parse_args()
 
 def int64_feature(value):
@@ -199,6 +202,7 @@ def retrieve_obj_with_class(path_object):
     obj_paths = []
     for class_obj in os.listdir(path_object):
         class_obj_path = os.path.join(path_object, class_obj)
+        print(class_obj_path)
         if os.path.isdir(class_obj_path):
             for path in os.listdir(class_obj_path):
                 img_path = os.path.join(class_obj_path, path)
@@ -210,7 +214,7 @@ def retrieve_obj_with_class(path_object):
 
 def add_to_tfrecord(img_filename, data, tfrecord_writer):
     # with tf.io.gfile.GFile(img_filename, 'rb') as fid:
-    with tf.io.gfile.GFile(img_filename, 'rb') as fid:
+    with tf.gfile.GFile(img_filename, 'rb') as fid:
         encoded_jpg = fid.read()
     image = PIL.Image.open(img_filename)
     if image.format != 'JPEG':
@@ -246,13 +250,21 @@ def generate_images(back_paths, obj_paths, tfrecord_writer, class_dict, output_p
     
     csv_lines = []
     csv_lines_TS = []
+    random_class_index = []
+    class_names = os.listdir(".\\bdd\\bdd{}\\objects_with_class".format(args.bdd_index))
+    class_dict_temp = class_dict
+    class_names_temp = class_names
+    
+    for i in range (args.nb_classes) :
+        rand_index = np.random.choice(class_names_temp)
+        class_names_temp.remove(rand_index)
+        random_class_index.append(rand_index)
     
     for img_idx in range(nbr_images):
         back_path = np.random.choice(back_paths)
         nbr_objs = np.random.choice(range(0, max_nbr_objs)) + 1
         obj_sizes = [np.random.uniform(*size_range) for _ in range(nbr_objs)]
         obj_sizes.sort(reverse=False)
-
         # Load backgroud image
         b = load_background(back_path, back_size, back_size)
 
@@ -268,8 +280,12 @@ def generate_images(back_paths, obj_paths, tfrecord_writer, class_dict, output_p
         
         for obj_index in range(nbr_objs):
             obj_size = obj_sizes[obj_index]
+            rdidx= np.random.choice(range(0, len(random_class_index)))
             choice_index = np.random.choice(range(len(obj_paths)))
-            obj_path, obj_class = obj_paths[choice_index]
+            a = os.path.join(".\\bdd\\bdd{}\\objects_with_class".format(args.bdd_index), class_names_temp[rdidx])
+            c = np.random.choice(os.listdir(a))
+            obj_path = os.path.join(a, c)
+            obj_class = class_names_temp[rdidx]
             x = int(np.random.uniform(back_size - obj_size - 1))
             y = int(np.random.uniform(back_size - obj_size - 1))
             angle = int(np.random.uniform(0, 360))
@@ -308,12 +324,14 @@ def generate_images(back_paths, obj_paths, tfrecord_writer, class_dict, output_p
             # f.write('img_filename,xmin,ymin,xmax,ymax,classe\n')
             for l in csv_lines:
                 f.write(l)
-                
-back_paths = retrieve_background('Background')
+
+if not os.path.exists('.\\result\\annotation{}'.format(args.annotation_id)):
+    os.makedirs('.\\result\\annotation{}'.format(args.annotation_id))            
+back_paths = retrieve_background('.\\bdd\\bdd{}\\Background'.format(args.bdd_index))
 
 
 
-obj_paths = retrieve_obj_with_class('objects_with_class')
+obj_paths = retrieve_obj_with_class('.\\bdd\\bdd{}\\objects_with_class'.format(args.bdd_index))
 
 
 def read_classes(class_filename):
@@ -324,9 +342,9 @@ def read_classes(class_filename):
 # !mkdir result
 
 class_dict = read_classes('data/keys.names')
-tf_filename = get_output_filename('keys_and_background', 'keys', 1)
+tf_filename = get_output_filename('.\\result\\annotation{}'.format(args.annotation_id), 'keys', 1)
 # with tf.io.TFRecordWriter(tf_filename) as tfrecord_writer:
-with tf.io.TFRecordWriter(tf_filename) as tfrecord_writer:
-    generate_images(back_paths, obj_paths, tfrecord_writer, class_dict, 'keys_and_background', args.nbr_images, args.max_nbr_objs, size_range=(70, 200), back_size=800)
+with tf.python_io.TFRecordWriter(tf_filename) as tfrecord_writer:
+    generate_images(back_paths, obj_paths, tfrecord_writer, class_dict, '.\\result\\annotation{}'.format(args.annotation_id), args.nbr_images, args.max_nbr_objs, size_range=(70, 200), back_size=800)
 
 print("Execution du code python terminee avec succes")

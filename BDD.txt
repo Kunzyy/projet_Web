@@ -30,7 +30,6 @@ CREATE TABLE annotations (
 	bdd_id integer REFERENCES bdd (bdd_id),
 	application_id integer REFERENCES applications (application_id),
 	user_id integer REFERENCES users (user_id),
-	creation_path VARCHAR ( 255 ) NOT NULL,
 	creation_date DATE NOT NULL DEFAULT CURRENT_DATE,
 	description VARCHAR ( 255 ) NOT NULL	
 ) ;

@@ -1,27 +1,22 @@
 import './App.css';
 import React , {useState} from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import DataServiceUser from './services/tmpUserService';
 
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 
 import {useStyles, Copyright, navbar} from "./commonFunctions";
 import {useCookies} from "react-cookie";
+import {useLocation} from "react-router-dom";
 
 function Resultat() {
     const classes = useStyles();
-    const [NbrImg, setNbrImg] = useState('');
-    const [NbrObjet, setNbrObjet] = useState('');
-    const [Description, setDescription] = useState('');
 
     const [cookies, setCookie] = useCookies(['userId', 'isLogged', 'isAdmin']);
+
+    const [annotationId, setAnnotationId] = useState(null);
+    const [path, setPath] = useState('');
 
     if(cookies.isLogged === 'false'){
         setCookie('userId', undefined);
@@ -30,29 +25,19 @@ function Resultat() {
         window.location.href='/';
     }
 
-    const submitValue = () => {
-        var data = {
-            'nbr image' : NbrImg,
-            'nbr objet' : NbrObjet,
-            'description' : Description,
-            'bdd_name': 'bdd test',
-            'bdd_id': 2,
-            'bdd_size': 0,
-            'nb_classes':0,
-            'application_id':1,
-            'user_id':1,
-            'creation_path': 'path',
-            'creation_date': '04/06/21'
-
-        };
-        DataServiceUser.annoter(data)
-      .then(response => {console.log(response.data);})
-      .catch(e => {
-        console.log(e);
-      });
-      console.log(data)
+    const id = new URLSearchParams(useLocation().search).get('id');
+    if(!annotationId && id){
+            setAnnotationId(id);
     }
-    
+
+    if(path === ''){
+        let img = Math.floor(Math.random() * 19) + 1;
+        setPath('bdd1_result/'+img+'.PNG');
+        console.log(path);
+    }
+
+
+
     return (
         <div className="App">
             <div className={classes.root}>
@@ -68,30 +53,25 @@ function Resultat() {
                     }
                 )}
 
-            <Grid container spacing={3}>
-                <Grid item xs={12} >
-                    <Container  >
-                        <br />
-                        <Typography component="div" style={{ backgroundColor: '#CACFD2 ', height: '45vh' }} >
-                            <h1> Resumé de l'annotation </h1>
-                            les actions requises pour l'utilisation de l'application seront mises là!
-                        </Typography>
-                        <ButtonGroup variant="contained" color="primary" size="large" aria-label="contained primary button group">
-                        <Button>Nouvelle Annotation</Button>
-                        <Button onClick={submitValue}>Télécharger Annnotation</Button>
-                        <Button onClick={submitValue}>Ajouter Annotation</Button>
-                    </ButtonGroup>
+                <Grid container spacing={3}>
+                    <Grid item xs={12} >
+                        <Container  >
+                            <p>Upload d'un modèle</p>
+                            <button>Tester l annotation</button>
+                            <br />
+                            <Typography component="div" style={{ backgroundColor: '#CACFD2 ', height: '70vh' }} >
+                                <h1> Résumé de l'annotation {annotationId}</h1>
 
-                    </Container>
+                                <img src ={path} alt="resultat"/>
+                            </Typography>
+                        </Container>
+                    </Grid>
                 </Grid>
-            </Grid>
-
             </div>
             <Box mt={8}>
                 <Copyright />
             </Box>
         </div>
-
     );
 }
 

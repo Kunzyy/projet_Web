@@ -2,7 +2,6 @@ import './App.css';
 import React , {useState} from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import DataServiceUser from './services/tmpUserService';
 import ApplicationService from './services/applications.service';
 import AnnotationService from './services/annotations.service';
 
@@ -14,6 +13,7 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import {useCookies} from "react-cookie";
 import DOMPurify from "dompurify"
 import { useDropzone } from "react-dropzone"
+import {useLocation} from "react-router-dom";
 
 import {useStyles, Copyright, navbar} from "./commonFunctions";
 
@@ -22,10 +22,17 @@ function Applications() {
     const [NbrImg, setNbrImg] = useState(500);
     const [NbrObjet, setNbrObjet] = useState(3);
     const [NbrClasses, setNbrClasses] = useState(3);
-    const [Description, setDescription] = useState('');
+    const [annotDescription, setAnnotDescription] = useState();
 
-    const [applicationName, setName] = useState('Veuillez choisir une application à gauche');
+
+    const [appliDescription, setAppliDescription] = useState('Veuillez choisir une application à gauche');
+    const [applicationName, setName] = useState('Application');
+
     const [apps, setApps] = useState('');
+    const [bddId, setBddId] = useState(null);
+    const [options, setOptions] = useState([]);
+    const [error, setError] = useState('');
+
     const [files, setFiles] = useState([])
 
     const [cookies, setCookie] = useCookies(['userId', 'isLogged', 'isAdmin']);
@@ -50,11 +57,9 @@ function Applications() {
             .then(res => {
                 for (let i = 0; i < res.data.length; i++) {
                     const row = res.data[i];
-                    console.log(row);
                     htmlOutput.push('<li> <a href="?id='+ row.application_id +'">' + row.application_name + '</a></li>');
                 }
                 setApps(htmlOutput.join('\n'));
-                console.log(htmlOutput.join('\n'));
             })
             .catch(err => {
                 console.log(err);
@@ -62,39 +67,47 @@ function Applications() {
             })
     }
 
-    if(params.get('id')){
-        ApplicationService.getDescrById(params.get('id'))
+    const id = new URLSearchParams(useLocation().search).get('id');
+    if(id){
+        ApplicationService.getDescrById(id)
             .then(res => {
-                console.log(res);
                 setName(res.data.application_name);
-                setDescription(res.data.description);
+                setAppliDescription(res.data.description);
             })
             .catch(err => {
                 console.log(err);
             })
     }
 
-    const submitValue = () => {
-        var data = {
-            'nbr image' : NbrImg,
-            'nbr objet' : NbrObjet,
-            'description' : Description,
-            'bdd_name': 'bdd test',
-            'bdd_id': 2,
-            'bdd_size': 0,
-            'nb_classes':0,
-            'application_id':1,
-            'user_id':1,
-            'creation_path': 'path',
-            'creation_date': '04/06/21'
 
-        };
-        DataServiceUser.annoter(data)
-      .then(response => {console.log(response.data);})
-      .catch(e => {
-        console.log(e);
-      });
-      console.log(data)
+
+    if(!options.length) {
+        let tmpOptions = []
+
+        tmpOptions.push({
+            name: 'Choisissez une base de données',
+            value: null,
+        });
+
+        tmpOptions.push({
+            name: 'Nouvelle base de données',
+            value: 0,
+        });
+
+        AnnotationService.getAllBdd()
+            .then(res => {
+                for (let i = 0; i < res.data.length; i++) {
+                    const row = res.data[i];
+                    tmpOptions.push({
+                        name: 'bdd' + row.bdd_id,
+                        value: row.bdd_id,
+                    });
+                }
+                setOptions(tmpOptions);
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
 
     const { getRootProps, getInputProps } = useDropzone({
@@ -136,9 +149,6 @@ return (
                         </Container>
                         <br />
                         <br />
-              
-
-
                     </Container>
                 </Grid>
                 <Grid item xs={9} >
@@ -146,18 +156,26 @@ return (
                         <br />
                         <Typography component="div" style={{ backgroundColor: '#cfe8fc', height: '20vh' }} >
                             <h1>{applicationName}</h1>
-                            {Description}
+                            {appliDescription}
                         </Typography>
                     </Container>
 
                     <Container  >
                         <br />
-                        <Typography component="div" style={{ backgroundColor: '#CACFD2 ', height: '13vh' }} >
+                        <Typography component="div" style={{ backgroundColor: '#CACFD2 ', height: '25vh' }} >
+
                         <h1> Zone de drop</h1>
+                            <select id="bdd" onChange={e => setBddId(e.target.value)}>
+                                    {options.map(item => (
+                                        <option value={item.value}>
+                                            {item.name}
+                                        </option>
+                                    ))}
+                            </select>
                             <div {...getRootProps()}>
-                            <input {...getInputProps()} />
-                            <p>Drop le fichier des images d'objet</p>
-                        </div>
+                                <input {...getInputProps()} />
+                                <p>Drop le fichier des images d'objet</p>
+                            </div>
 
                         </Typography>
                         <br />
@@ -188,8 +206,9 @@ return (
                               id="Nombre de classe"
                               label="Nombre de classe"
                               type="number"
+                              value={NbrClasses}
                               helperText="Nombre de classe du dossier d'objet"
-                              onChange={e => setNbrObjet(e.target.value)}
+                              onChange={e => setNbrClasses(e.target.value)}
                               variant="outlined"
                             />
 
@@ -198,12 +217,10 @@ return (
                               label="Description"
                               type="text"
                               helperText="Description de l'annotation sur base des classes d'objet"
-                              value={Description}
-                              onChange={e => setDescription(e.target.value)}
-                              variant="outlined" 
-
+                              value={annotDescription}
+                              onChange={e => setAnnotDescription(e.target.value)}
+                              variant="outlined"
                             />
-
 
                           </div>
                         </form>
@@ -213,16 +230,33 @@ return (
                     <br />
                         <ButtonGroup variant="contained" color="primary" size="large" aria-label="contained primary button group">
                             <Button onClick={() =>{
-                                AnnotationService.runAnnotation(NbrImg, NbrObjet)
-                                .then(res => {
-                                console.log(res);
-                                })
-                                .catch(err => {
-                                    console.log(err);
-                                })
+
+                                if(bddId !== null && params.get('id') && cookies.userId !== '' && annotDescription !== ''){
+                                    setError(null);
+                                    AnnotationService.runAnnotation(
+                                        NbrImg,
+                                        NbrObjet,
+                                        NbrClasses,
+                                        annotDescription,
+                                        cookies.userId,
+                                        params.get('id'),
+                                        bddId)
+                                        .then(res => {
+                                            console.log(res);
+                                            window.location.href = '/resultat?id='+ parseInt(res.data);
+                                        })
+                                        .catch(err => {
+                                            console.log(err);
+                                        })
+                                }else
+                                {
+                                    setError('Données incomplètes ! (Database, application ou description)')
+                                }
                             }
                             }>Annoter</Button>
                         </ButtonGroup>
+
+                    <p>{error}</p>
                 </Grid>
             </Grid>
             </div>

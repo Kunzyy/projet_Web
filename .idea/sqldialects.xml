@@ -4,7 +4,6 @@
     <file url="file://$PROJECT_DIR$/server/queries/annotation.js" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/server/queries/applications.js" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/server/queries/bdd.js" dialect="PostgreSQL" />
-    <file url="file://$PROJECT_DIR$/server/queries/refApplications.js" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/server/queries/users.js" dialect="PostgreSQL" />
     <file url="PROJECT" dialect="PostgreSQL" />
   </component>

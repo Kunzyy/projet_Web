@@ -8,7 +8,7 @@ class ApplicationService {
     getDescrById(applicationId){
         console.log(applicationId);
         return http.post('applications/getDescrById',{
-            applicationId: applicationId
+            applicationId: parseInt(applicationId)
         });
     }
 

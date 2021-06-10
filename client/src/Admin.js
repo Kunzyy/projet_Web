@@ -2,7 +2,6 @@ import './App.css';
 import React , {useState} from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import DataServiceUser from '../src/services/tmpUserService';
 
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -11,10 +10,8 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 
 import {useStyles, Copyright, navbar} from "./commonFunctions";
 import {useCookies} from "react-cookie";
-import ApplicationService from "./services/applications.service";
 import AnnotationService from "./services/annotations.service";
 import UserService from "./services/user.service";
-import DOMPurify from "dompurify";
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
@@ -24,10 +21,7 @@ function Admin() {
 
     const [users, setUsers] = useState([]);
     const [annot, setAnnot] = useState([]);
-    const [NbrImg, setNbrImg] = useState(500);
-    const [NbrObjet, setNbrObjet] = useState(3);
     const [message, setMsg] = useState('');
-    const [Description, setDescription] = useState('');
     const [annotId, setAnnotId] = useState('');
 
     //Tableau users
@@ -47,25 +41,8 @@ function Admin() {
         window.location.href='/';
     }
 
-    const submitValue = () => {
-        var data = {
-            'nbr image' : NbrImg,
-            'nbr objet' : NbrObjet,
-            'description' : Description,
-            'bdd_name': 'bdd test',
-            'bdd_id': 2,
-            'bdd_size': 0,
-            'nb_classes':0,
-            'application_id':1,
-            'user_id':1,
-            'creation_path': 'path',
-            'creation_date': '04/06/21'
-
-        };
-    }
-
-    function createDataAnnotations(id, database, application, user,  path, date, descr) {
-        return {id, database, application, user, path, date, descr};
+    function createDataAnnotations(id, database, application, user, path, date, descr) {
+        return {id, database, user, application, path, date, descr};
     }
 
     if(!annot.length) {
@@ -77,9 +54,9 @@ function Admin() {
                     tmp.push(createDataAnnotations(
                         row.annotation_id,
                         row.bdd_id,
-                        row.application_id,
                         row.user_id,
-                        row.creation_path,
+                        row.application_id,
+                        'bdd'+row.annotation_id,
                         row.creation_date,
                         row.description
                     ));
@@ -93,13 +70,14 @@ function Admin() {
 
     const columnsAnnotations = [
         {id: 'id', label: 'ID', minWidth: 70 },
-        {id: 'database_id', label: 'ID Database', minWidth: 70 },
-        {id: 'user_id', label: 'ID User', minWidth: 70 },
-        {id: 'application_id', label: 'ID application', minWidth: 70},
-        {id: 'path', label: 'Path', minWidth: 200},
+        {id: 'database', label: 'ID Database', minWidth: 70 },
+        {id: 'user', label: 'ID User', minWidth: 70 },
+        {id: 'application', label: 'ID application', minWidth: 70},
+        {id: 'path', label: 'Path', minWidth: 100},
         {id: 'date', label: 'Date', minWidth: 100},
-        {id: 'description', label:'Description', minWidth: 250}
+        {id: 'descr', label:'Description', minWidth: 250}
     ];
+
 
     function createDataUsers(id, username, fullName, boolAdmin, email) {
         return { id, username, fullName, boolAdmin, email };
@@ -125,8 +103,8 @@ function Admin() {
         {id: 'username', label: 'Username', minWidth: 170 },
         {id: 'fullName', label: 'Nom complet', minWidth: 170},
         {id: 'boolAdmin', label: 'Admin', minWidth: 100,
-            format: (value) => {if (value === 'true'){return 'Oui';}else{return 'Non'}}},
-        {id: 'email', label: 'email', minWidth: 200},
+        format: (value) => {if(value){return 'Oui';}else{return 'Non'}}},
+        {id: 'email', label: 'email', minWidth: 200}
     ];
 
     return (
@@ -172,7 +150,7 @@ function Admin() {
                                                             const value = row[column.id];
                                                             return (
                                                                 <TableCell key={column.id} align={column.align}>
-                                                                    {column.format && typeof value === 'number' ? column.format(value) : value}
+                                                                    {column.format ? column.format(value) : value}
                                                                 </TableCell>
                                                             );
                                                         })}
@@ -215,7 +193,13 @@ function Admin() {
                                     >
                                         Supprimer Annotation</Button>
                                     <Button href={"#"}>Ajouter données annotation</Button>
-                                    <Button href={"#"}>Tester des annotations</Button>
+                                    <Button onClick={()=>{
+                                        if(annotId){
+                                            window.location.href = '/resultat?id=' + annotId;
+                                        }else{
+                                            setMsg('Choisissez une annotation à tester');
+                                        }
+                                    }}>Tester des annotations</Button>
                                 </ButtonGroup>
                                     <br/>
                                 <hr/>
@@ -248,7 +232,7 @@ function Admin() {
                                                             const value = row[column.id];
                                                             return (
                                                                 <TableCell key={column.id} align={column.align}>
-                                                                    {column.format && typeof value === 'number' ? column.format(value) : value}
+                                                                    {column.format ? column.format(value) : value}
                                                                 </TableCell>
                                                             );
                                                         })}
