@@ -20,6 +20,7 @@ function getBdd(bddId, nbrClasses) {
 
             Bdd.addBdd(bddSize, nbrClasses, function(err,result){
                 if(err){
+                    console.log(err);
                     reject(err);
                 }
                 else{
@@ -36,19 +37,20 @@ router.post('/runAnnotation', function(req, res) {
     console.log(data);
     getBdd(data.bddId,data.nbrClasses)
         .then(bddId => {
-            const bddName = 'bdd' + bddId;
             Annotation.addAnnotation(data, bddId, function(err, result){
                 if(err){
+                    console.log(err);
                     res.status(400).json(err);
                 }
                 else{
                     const newAnnotationId = result.rows[0].annotation_id;
-                    runAnnotation(data, newAnnotationId, bddName)
+                    runAnnotation(data, newAnnotationId, bddId)
                         .then(() => {
                                 res.json(newAnnotationId);
                             }
                         )
                         .catch(err2 => {
+                            console.log(err2);
                             res.status(400).json(err2)
                         })
                 }
@@ -65,7 +67,6 @@ router.get('/getAll', function(req, res){
             console.log(err);
             res.status(400).json(err);
         } else {
-            console.log(result.rows);
             res.json(result.rows);
         }
     })

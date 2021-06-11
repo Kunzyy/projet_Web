@@ -56,7 +56,7 @@ function Admin() {
                         row.bdd_id,
                         row.user_id,
                         row.application_id,
-                        'bdd'+row.annotation_id,
+                        'annotation'+row.annotation_id,
                         row.creation_date,
                         row.description
                     ));
